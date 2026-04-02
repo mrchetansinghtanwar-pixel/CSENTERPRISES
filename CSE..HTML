@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE – C.S.ENERPRISES</title>
+<link href="https://fontsfonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a3c6e;
+    --blue-mid: #2563eb;
+    --blue-light: #3b82f6;
+    --blue-pale: #dbeafe;
+    --white: #ffffff;
+    --off-white: #f0f4ff;
+    --light-gray: #e8eef8;
+    --dark: #0f1e35;
+    --dark-2: #162947;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --accent: #f59e0b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--white); color:var(--text); font-family:'Barlow',sans-serif; overflow-x:hidden; }
+
+  /* NAV */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 60px; background:rgba(255,255,255,0.97); backdrop-filter:blur(12px); border-bottom:2px solid var(--blue-pale); box-shadow:0 2px 20px rgba(26,60,110,0.08); animation:fadeDown 0.8s ease both; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .logo { display:flex; align-items:center; gap:14px; }
+  .logo-icon { width:52px; height:52px; background:var(--blue); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:white; clip-path:polygon(0 0,90% 0,100% 10%,100% 100%,10% 100%,0 90%); }
+  .logo-main { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; letter-spacing:3px; color:var(--blue); line-height:1; }
+  .logo-sub { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:4px; color:var(--text-muted); text-transform:uppercase; margin-top:3px; }
+  nav ul { list-style:none; display:flex; gap:36px; }
+  nav ul a { text-decoration:none; color:var(--text-muted); font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; transition:color 0.3s; font-weight:600; }
+  nav ul a:hover { color:var(--blue); }
+  .nav-cta { background:var(--blue) !important; color:white !important; padding:10px 22px; font-weight:700 !important; transition:background 0.3s,transform 0.2s !important; border-radius:2px; }
+  .nav-cta:hover { background:var(--blue-mid) !important; transform:translateY(-1px); }
+
+  /* HERO */
+  .hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; background:var(--dark); overflow:hidden; position:relative; }
+  .hero::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--dark) 0%,var(--dark-2) 50%,#1a3c6e 100%); z-index:0; }
+  .hero-left { display:flex; flex-direction:column; justify-content:center; padding:140px 60px 80px; position:relative; z-index:2; }
+  .hero-tag { display:inline-flex; align-items:center; gap:12px; margin-bottom:28px; animation:fadeUp 0.8s 0.3s ease both; }
+  .hero-tag::before { content:''; width:36px; height:2px; background:var(--blue-light); }
+  .hero-tag span { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:5px; text-transform:uppercase; color:var(--blue-light); }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(48px,5vw,76px); font-weight:900; line-height:1.05; color:white; animation:fadeUp 0.8s 0.45s ease both; }
+  .hero h1 em { font-style:italic; color:var(--blue-light); }
+  .hero-desc { margin-top:24px; font-size:16px; line-height:1.85; color:rgba(255,255,255,0.6); max-width:440px; font-weight:300; animation:fadeUp 0.8s 0.6s ease both; }
+  .hero-stats { display:flex; gap:44px; margin-top:48px; animation:fadeUp 0.8s 0.75s ease both; }
+  .stat-num { font-family:'Playfair Display',serif; font-size:40px; font-weight:700; color:var(--blue-light); line-height:1; }
+  .stat-label { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-top:6px; }
+  .hero-actions { display:flex; gap:16px; margin-top:44px; animation:fadeUp 0.8s 0.9s ease both; }
+  .btn-primary { background:var(--blue-mid); color:white; padding:15px 34px; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:3px; text-transform:uppercase; font-weight:700; text-decoration:none; border:none; cursor:pointer; transition:all 0.3s; border-radius:2px; }
+  .btn-primary:hover { background:var(--blue-light); transform:translateY(-2px); box-shadow:0 10px 28px rgba(37,99,235,0.4); }
+  .btn-outline { background:transparent; color:white; padding:15px 34px; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:3px; text-transform:uppercase; font-weight:600; text-decoration:none; border:1px solid rgba(255,255,255,0.3); transition:all 0.3s; cursor:pointer; border-radius:2px; }
+  .btn-outline:hover { border-color:var(--blue-light); color:var(--blue-light); }
+  .hero-right { position:relative; overflow:hidden; z-index:1; }
+  .hero-img-bg { position:absolute; inset:0; background:linear-gradient(to right,var(--dark) 0%,rgba(15,30,53,0.3) 40%,transparent 70%),url('https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=1200&q=85') center/cover no-repeat; animation:zoomIn 8s ease both; }
+  @keyframes zoomIn { from{transform:scale(1.08)} to{transform:scale(1)} }
+  .hero-right::after { content:''; position:absolute; bottom:0; left:0; right:0; height:180px; background:linear-gradient(to top,var(--dark),transparent); }
+  .year-badge { position:absolute; bottom:60px; right:40px; z-index:3; text-align:center; border:2px solid var(--blue-light); padding:22px 26px; background:rgba(15,30,53,0.7); backdrop-filter:blur(8px); animation:fadeUp 0.8s 1.1s ease both; }
+  .year-badge .yr { font-family:'Playfair Display',serif; font-size:46px; font-weight:900; color:var(--blue-light); line-height:1; }
+  .year-badge .yr-label { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:4px; color:rgba(255,255,255,0.6); text-transform:uppercase; margin-top:6px; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+  /* MARQUEE */
+  .marquee-strip { background:var(--blue); padding:13px 0; overflow:hidden; white-space:nowrap; }
+  .marquee-inner { display:inline-flex; animation:scroll 22s linear infinite; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:4px; text-transform:uppercase; color:white; font-weight:700; padding:0 28px; }
+  .marquee-dot { color:rgba(255,255,255,0.35); }
+
+  /* SECTIONS */
+  section { padding:96px 60px; }
+  .section-tag { display:inline-flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .section-tag::before { content:''; width:28px; height:2px; background:var(--blue-mid); }
+  .section-tag span { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:5px; text-transform:uppercase; color:var(--blue-mid); }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(34px,3vw,52px); font-weight:700; color:var(--dark); line-height:1.1; }
+  .section-title em { color:var(--blue-mid); font-style:italic; }
+
+  /* ABOUT */
+  .about { background:var(--off-white); display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+  .about-img-wrap { position:relative; }
+  .about-img { width:100%; height:500px; object-fit:cover; display:block; }
+  .about-img-overlay { position:absolute; bottom:-22px; right:-22px; background:var(--blue); padding:28px 32px; }
+  .about-img-overlay .big { font-family:'Playfair Display',serif; font-size:50px; font-weight:900; color:white; line-height:1; }
+  .about-img-overlay .small { font-size:12px; color:rgba(255,255,255,0.7); font-family:'Barlow Condensed'; letter-spacing:2px; text-transform:uppercase; margin-top:5px; }
+  .about-content p { color:var(--text-muted); font-size:15px; line-height:1.9; margin-top:22px; font-weight:300; }
+  .about-features { margin-top:36px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .feat-item { display:flex; align-items:flex-start; gap:12px; }
+  .feat-icon { width:36px; height:36px; background:var(--blue-pale); border:1px solid var(--blue-light); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px; margin-top:2px; border-radius:4px; }
+  .feat-text strong { display:block; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:var(--dark); margin-bottom:3px; }
+  .feat-text span { font-size:13px; color:var(--text-muted); line-height:1.6; }
+
+  /* SERVICES */
+  .services { background:var(--white); }
+  .services-header { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:end; margin-bottom:50px; }
+  .services-desc { color:var(--text-muted); font-size:15px; line-height:1.8; font-weight:300; padding-top:16px; }
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .service-card { background:var(--off-white); padding:40px 32px; position:relative; overflow:hidden; transition:all 0.4s; cursor:default; border:1px solid var(--light-gray); border-radius:4px; }
+  .service-card::before { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--blue-mid); transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease; }
+  .service-card:hover { background:var(--white); border-color:var(--blue-pale); transform:translateY(-5px); box-shadow:0 16px 40px rgba(26,60,110,0.1); }
+  .service-card:hover::before { transform:scaleX(1); }
+  .service-num { font-family:'Playfair Display',serif; font-size:44px; font-weight:900; color:var(--blue-pale); line-height:1; margin-bottom:20px; }
+  .service-icon { font-size:28px; margin-bottom:16px; }
+  .service-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--dark); margin-bottom:12px; }
+  .service-desc { font-size:14px; color:var(--text-muted); line-height:1.8; font-weight:300; }
+
+  /* PROJECTS */
+  .projects { background:var(--dark); }
+  .projects .section-title { color:white; }
+  .projects-grid { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:280px 280px; gap:10px; margin-top:50px; }
+  .proj-card { position:relative; overflow:hidden; cursor:pointer; }
+  .proj-card:first-child { grid-row:1/3; }
+  .proj-img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease; filter:brightness(0.75); }
+  .proj-card:hover .proj-img { transform:scale(1.07); filter:brightness(0.45); }
+  .proj-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(15,30,53,0.92) 0%,transparent 55%); display:flex; flex-direction:column; justify-content:flex-end; padding:26px; }
+  .proj-cat { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--blue-light); margin-bottom:7px; }
+  .proj-name { font-family:'Playfair Display',serif; font-size:20px; color:white; line-height:1.2; }
+  .proj-loc { font-size:12px; color:rgba(255,255,255,0.5); margin-top:5px; }
+  .proj-arrow { position:absolute; top:20px; right:20px; width:38px; height:38px; background:var(--blue-mid); display:flex; align-items:center; justify-content:center; color:white; font-size:16px; opacity:0; transform:translateY(-8px); transition:all 0.4s; border-radius:2px; }
+  .proj-card:hover .proj-arrow { opacity:1; transform:translateY(0); }
+
+  /* GALLERY */
+  .gallery { background:var(--off-white); }
+  .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:220px; gap:10px; margin-top:50px; }
+  .gal-item { position:relative; overflow:hidden; cursor:pointer; border-radius:3px; }
+  .gal-item.tall { grid-row:span 2; }
+  .gal-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease,filter 0.4s; filter:brightness(0.85); }
+  .gal-item:hover img { transform:scale(1.08); filter:brightness(0.5); }
+  .gal-overlay { position:absolute; inset:0; display:flex; align-items:flex-end; padding:18px; background:linear-gradient(to top,rgba(15,30,53,0.85) 0%,transparent 60%); opacity:0; transition:opacity 0.4s; }
+  .gal-item:hover .gal-overlay { opacity:1; }
+  .gal-overlay span { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--blue-light); font-weight:600; }
+
+  /* WHY US */
+  .whyus { background:var(--white); display:grid; grid-template-columns:1fr 1.2fr; gap:90px; align-items:center; }
+  .whyus-visual { position:relative; height:480px; }
+  .whyus-bg-img { width:100%; height:100%; object-fit:cover; filter:brightness(0.65); border-radius:2px; }
+  .whyus-accent { position:absolute; top:-16px; left:-16px; width:140px; height:140px; border:2px solid var(--blue-mid); opacity:0.25; border-radius:2px; }
+  .whyus-accent2 { position:absolute; bottom:-16px; right:-16px; width:90px; height:90px; border:2px solid var(--blue-light); opacity:0.2; border-radius:2px; }
+  .whyus-list { margin-top:40px; display:flex; flex-direction:column; gap:24px; }
+  .why-item { display:flex; gap:18px; align-items:flex-start; padding-bottom:24px; border-bottom:1px solid var(--light-gray); }
+  .why-item:last-child { border-bottom:none; padding-bottom:0; }
+  .why-num { font-family:'Playfair Display',serif; font-size:32px; font-weight:900; color:var(--blue-pale); line-height:1; flex-shrink:0; width:46px; }
+  .why-text strong { display:block; font-family:'Barlow Condensed',sans-serif; font-size:14px; letter-spacing:2px; text-transform:uppercase; color:var(--dark); margin-bottom:7px; }
+  .why-text p { font-size:14px; color:var(--text-muted); line-height:1.8; font-weight:300; }
+
+  /* TESTIMONIALS */
+  .testimonials { background:var(--dark-2); text-align:center; }
+  .testimonials .section-title { color:white; }
+  .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:50px; text-align:left; }
+  .testi-card { background:rgba(255,255,255,0.05); padding:36px; border:1px solid rgba(255,255,255,0.08); transition:border-color 0.3s,background 0.3s; border-radius:3px; }
+  .testi-card:hover { border-color:var(--blue-light); background:rgba(37,99,235,0.08); }
+  .quote-mark { font-family:'Playfair Display',serif; font-size:72px; color:var(--blue-light); opacity:0.2; line-height:0.6; margin-bottom:22px; }
+  .testi-text { font-size:14px; color:rgba(255,255,255,0.6); line-height:1.85; font-weight:300; font-style:italic; }
+  .testi-author { margin-top:26px; display:flex; align-items:center; gap:12px; }
+  .testi-avatar { width:42px; height:42px; background:var(--blue-mid); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:white; flex-shrink:0; border-radius:50%; }
+  .testi-name strong { display:block; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:white; }
+  .testi-name span { font-size:12px; color:rgba(255,255,255,0.4); }
+  .stars { color:var(--accent); font-size:13px; margin-bottom:16px; letter-spacing:2px; }
+
+  /* MAP */
+  .map-section { background:var(--off-white); padding:0; }
+  .map-header { padding:70px 60px 36px; text-align:center; }
+  .map-embed { width:100%; height:420px; border:none; display:block; }
+
+  /* CONTACT */
+  .contact { background:var(--white); display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+  .contact-info p { color:var(--text-muted); font-size:15px; line-height:1.8; margin-top:22px; font-weight:300; }
+  .contact-details { margin-top:44px; display:flex; flex-direction:column; gap:24px; }
+  .contact-row { display:flex; gap:18px; align-items:flex-start; }
+  .contact-icon { width:44px; height:44px; background:var(--blue-pale); border:1px solid var(--blue-light); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; border-radius:4px; }
+  .contact-row-text strong { display:block; font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--blue-mid); margin-bottom:5px; }
+  .contact-row-text span { font-size:15px; color:var(--text); font-weight:400; }
+  .social-links { margin-top:36px; }
+  .social-links h4 { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--blue-mid); margin-bottom:14px; }
+  .social-icons { display:flex; gap:10px; flex-wrap:wrap; }
+  .soc-btn { display:inline-flex; align-items:center; gap:7px; padding:10px 16px; border-radius:3px; font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:700; text-decoration:none; transition:all 0.3s; }
+  .soc-fb { background:#1877f2; color:white; }
+  .soc-fb:hover { background:#1558c0; transform:translateY(-2px); }
+  .soc-ig { background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:white; }
+  .soc-ig:hover { opacity:0.88; transform:translateY(-2px); }
+  .soc-wa { background:#25d366; color:white; }
+  .soc-wa:hover { background:#1da851; transform:translateY(-2px); }
+
+  .contact-form { padding-top:12px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .form-group { margin-bottom:18px; }
+  .form-group label { display:block; font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--text-muted); margin-bottom:7px; }
+  .form-group input,.form-group textarea,.form-group select { width:100%; background:var(--off-white); border:1px solid var(--light-gray); color:var(--text); padding:13px 16px; font-family:'Barlow',sans-serif; font-size:14px; font-weight:300; outline:none; transition:border-color 0.3s; resize:none; -webkit-appearance:none; border-radius:3px; }
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus { border-color:var(--blue-mid); box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
+  .form-group textarea { height:120px; }
+  .submit-btn { width:100%; background:var(--blue); color:white; padding:17px; font-family:'Barlow Condensed',sans-serif; font-size:14px; letter-spacing:4px; text-transform:uppercase; font-weight:700; border:none; cursor:pointer; transition:all 0.3s; border-radius:3px; }
+  .submit-btn:hover { background:var(--blue-mid); transform:translateY(-2px); box-shadow:0 10px 28px rgba(26,60,110,0.25); }
+
+  /* FOOTER */
+  footer { background:var(--dark); border-top:3px solid var(--blue-mid); padding:60px; display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:50px; }
+  .footer-logo-main { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; letter-spacing:3px; color:var(--blue-light); line-height:1; }
+  .footer-logo-sub { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:4px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-top:3px; }
+  .footer-brand p { font-size:14px; color:rgba(255,255,255,0.45); line-height:1.8; margin-top:16px; font-weight:300; }
+  .footer-social { display:flex; gap:10px; margin-top:18px; }
+  .fsoc { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; text-decoration:none; transition:transform 0.3s,opacity 0.3s; }
+  .fsoc:hover { transform:translateY(-3px); opacity:0.85; }
+  .footer-col h4 { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--blue-light); margin-bottom:18px; }
+  .footer-col ul { list-style:none; }
+  .footer-col ul li { margin-bottom:11px; }
+  .footer-col ul a { text-decoration:none; color:rgba(255,255,255,0.45); font-size:14px; font-weight:300; transition:color 0.3s; }
+  .footer-col ul a:hover { color:var(--blue-light); }
+  .footer-bottom { background:var(--dark); border-top:1px solid rgba(255,255,255,0.06); padding:22px 60px; display:flex; justify-content:space-between; align-items:center; }
+  .footer-bottom p { font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:1px; }
+  .footer-bottom span { color:var(--blue-light); }
+
+  /* WHATSAPP FLOAT */
+  .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:999; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+  .wa-tooltip { background:white; color:var(--dark); padding:9px 15px; border-radius:8px; font-family:'Barlow',sans-serif; font-size:13px; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,0.15); white-space:nowrap; animation:pulse-fade 3s ease infinite; }
+  @keyframes pulse-fade { 0%,100%{opacity:1} 50%{opacity:0.65} }
+  .wa-btn { width:60px; height:60px; border-radius:50%; background:#25d366; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 6px 24px rgba(37,211,102,0.5); animation:wa-bounce 2.5s ease infinite; }
+  @keyframes wa-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+  .wa-btn:hover { transform:scale(1.12); box-shadow:0 10px 32px rgba(37,211,102,0.65); animation:none; }
+  .wa-btn svg { width:32px; height:32px; fill:white; }
+
+  /* CALL FLOAT */
+  .call-float { position:fixed; bottom:28px; left:28px; z-index:999; }
+  .call-btn { display:flex; align-items:center; gap:10px; background:var(--blue); color:white; padding:13px 22px; text-decoration:none; border-radius:40px; font-family:'Barlow Condensed',sans-serif; font-size:14px; letter-spacing:2px; font-weight:700; box-shadow:0 6px 24px rgba(26,60,110,0.4); transition:all 0.3s; }
+  .call-btn:hover { background:var(--blue-mid); transform:translateY(-3px); }
+
+  /* REVEAL */
+  .reveal { opacity:0; transform:translateY(35px); transition:opacity 0.8s ease,transform 0.8s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:900px){
+    nav { padding:14px 20px; }
+    nav ul { display:none; }
+    .hero { grid-template-columns:1fr; }
+    .hero-right { display:none; }
+    .hero-left { padding:110px 22px 60px; }
+    section { padding:60px 22px; }
+    .about,.whyus,.contact { grid-template-columns:1fr; gap:36px; }
+    .services-header { grid-template-columns:1fr; }
+    .services-grid { grid-template-columns:1fr; }
+    .projects-grid { grid-template-columns:1fr; grid-template-rows:auto; }
+    .proj-card:first-child { grid-row:auto; }
+    .testi-grid { grid-template-columns:1fr; }
+    footer { grid-template-columns:1fr 1fr; gap:36px; padding:40px 22px; }
+    .footer-bottom { padding:18px 22px; flex-direction:column; gap:8px; text-align:center; }
+    .about-img-overlay { right:0; bottom:0; }
+    .form-row { grid-template-columns:1fr; }
+    .gallery-grid { grid-template-columns:repeat(2,1fr); }
+    .gallery { padding:60px 22px; }
+    .map-header { padding:50px 22px 28px; }
+    .call-float { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- WHATSAPP FLOAT -->
+<div class="whatsapp-float">
+  <div class="wa-tooltip">💬 WhatsApp us!</div>
+  <a href="https://wa.me/917470677883?text=Hello%20C.S.%20Enterprises%2C%20I%20want%20to%20know%20more%20about%20your%20construction%20services." class="wa-btn" target="_blank">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.504 1.13 6.752 3.054 9.388L1.054 31l5.784-1.854C9.3 30.868 12.552 32 16.004 32 24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.394 22.588c-.39 1.098-1.926 2.01-3.162 2.274-.842.18-1.942.322-5.642-1.212-4.732-1.966-7.784-6.772-8.022-7.086-.228-.314-1.918-2.554-1.918-4.872 0-2.318 1.214-3.45 1.644-3.888.39-.398.848-.498 1.132-.498.282 0 .564.002.812.016.26.014.61-.098.956.73.39.896 1.326 3.214 1.44 3.448.114.234.19.508.038.814-.152.306-.228.496-.456.764-.228.268-.48.598-.686.804-.228.228-.464.474-.2.93.264.456 1.174 1.942 2.52 3.146 1.73 1.54 3.19 2.018 3.646 2.246.456.228.722.19.99-.114.268-.304 1.14-1.33 1.444-1.786.304-.456.608-.38 1.026-.228.418.152 2.66 1.254 3.116 1.482.456.228.76.34.874.532.114.19.114 1.092-.276 2.19z"/></svg>
+  </a>
+</div>
+
+<!-- CALL FLOAT -->
+<div class="call-float">
+  <a href="tel:+917470677883" class="call-btn">📞 +91 7470677883</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">CS</div>
+    <div>
+      <div class="logo-main">C.S. ENTERPRISES</div>
+      <div class="logo-sub">Building Excellence Since 2004</div>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact" class="nav-cta">Get Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-tag"><span>Trusted Builders Since 2004</span></div>
+    <h1>Crafting <em>Spaces</em><br>That Last Forever</h1>
+    <p class="hero-desc">C.S. Enterprises brings 20 years of mastery in construction — delivering landmark residential, commercial, and infrastructure projects across Indore.</p>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label">Years Experience</div></div>
+      <div class="stat-item"><div class="stat-num">350+</div><div class="stat-label">Projects Done</div></div>
+      <div class="stat-item"><div class="stat-num">98%</div><div class="stat-label">Client Satisfaction</div></div>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">Our Projects</a>
+      <a href="#contact" class="btn-outline">Free Consultation</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-bg"></div>
+    <div class="year-badge"><div class="yr">20</div><div class="yr-label">Years of Trust</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item">Residential Construction</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Commercial Buildings</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Interior Design</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Civil Engineering</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Renovation & Restoration</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Project Management</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Turnkey Solutions</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Residential Construction</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Commercial Buildings</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Interior Design</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Civil Engineering</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Renovation & Restoration</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Project Management</span><span class="marquee-dot">◆</span>
+    <span class="marquee-item">Turnkey Solutions</span><span class="marquee-dot">◆</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about reveal" id="about">
+  <div class="about-img-wrap">
+    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=700&q=85" alt="Construction" class="about-img">
+    <div class="about-img-overlay"><div class="big">20</div><div class="small">Years of<br>Excellence</div></div>
+  </div>
+  <div class="about-content">
+    <div class="section-tag"><span>Who We Are</span></div>
+    <h2 class="section-title">Building Dreams<br>with <em>Precision</em></h2>
+    <p>C.S. Enterprises was founded with a single vision — to build structures that stand the test of time. Over the past two decades, we've grown into one of the most trusted construction companies in Indore, known for uncompromising quality, on-time delivery, and transparent dealings.</p>
+    <p>From luxury residences to large-scale commercial complexes, every project reflects our passion for excellence and deep commitment to our clients.</p>
+    <div class="about-features">
+      <div class="feat-item"><div class="feat-icon">🏆</div><div class="feat-text"><strong>Award Winning</strong><span>Recognized for construction excellence</span></div></div>
+      <div class="feat-item"><div class="feat-icon">✅</div><div class="feat-text"><strong>ISO Certified</strong><span>Industry quality standards compliant</span></div></div>
+      <div class="feat-item"><div class="feat-icon">📅</div><div class="feat-text"><strong>On-Time Delivery</strong><span>We respect deadlines as much as budgets</span></div></div>
+      <div class="feat-item"><div class="feat-icon">🤝</div><div class="feat-text"><strong>Trusted Partners</strong><span>Long-term relationships built on integrity</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services reveal" id="services">
+  <div class="services-header">
+    <div><div class="section-tag"><span>What We Do</span></div><h2 class="section-title">Our Core<br><em>Services</em></h2></div>
+    <p class="services-desc">From the first foundation stone to the final finishing touch — C.S. Enterprises handles every phase with unmatched expertise and craftsmanship.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-num">01</div><div class="service-icon">🏠</div><div class="service-title">Residential Construction</div><p class="service-desc">Custom homes, apartments, villas, and housing colonies built with premium materials and skilled craftsmanship.</p></div>
+    <div class="service-card"><div class="service-num">02</div><div class="service-icon">🏢</div><div class="service-title">Commercial Buildings</div><p class="service-desc">Office complexes, retail spaces, hotels, and mixed-use developments designed for functionality and impact.</p></div>
+    <div class="service-card"><div class="service-num">03</div><div class="service-icon">🔨</div><div class="service-title">Renovation & Remodelling</div><p class="service-desc">Transform your space with full-scale renovation, structural repairs, and modern upgrades.</p></div>
+    <div class="service-card"><div class="service-num">04</div><div class="service-icon">🏗️</div><div class="service-title">Civil Infrastructure</div><p class="service-desc">Roads, bridges, drainage systems, and civil works executed with precision and safety compliance.</p></div>
+    <div class="service-card"><div class="service-num">05</div><div class="service-icon">🎨</div><div class="service-title">Interior Design & Fit-Out</div><p class="service-desc">Complete interior solutions — from space planning and design to furnishing and décor installation.</p></div>
+    <div class="service-card"><div class="service-num">06</div><div class="service-icon">📋</div><div class="service-title">Turnkey Project Management</div><p class="service-desc">End-to-end project handling from design and planning to execution, handover, and after-sales support.</p></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects reveal" id="projects">
+  <div class="section-tag"><span>Our Portfolio</span></div>
+  <h2 class="section-title">Featured <em>Projects</em></h2>
+  <div class="projects-grid">
+    <div class="proj-card">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=85" alt="Luxury Residences" class="proj-img">
+      <div class="proj-overlay"><div class="proj-cat">Residential</div><div class="proj-name">Green Valley Luxury Residences</div><div class="proj-loc">📍 Omaxe City 2, Indore</div></div>
+      <div class="proj-arrow">↗</div>
+    </div>
+    <div class="proj-card">
+      <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?w=500&q=85" alt="Office Tower" class="proj-img">
+      <div class="proj-overlay"><div class="proj-cat">Commercial</div><div class="proj-name">CS Business Tower</div><div class="proj-loc">📍 City Centre, Indore</div></div>
+      <div class="proj-arrow">↗</div>
+    </div>
+    <div class="proj-card">
+      <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=500&q=85" alt="Interior" class="proj-img">
+      <div class="proj-overlay"><div class="proj-cat">Interior</div><div class="proj-name">Prestige Corporate Interior</div><div class="proj-loc">📍 Tech Park, Indore</div></div>
+      <div class="proj-arrow">↗</div>
+    </div>
+    <div class="proj-card">
+      <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500&q=85" alt="Villa" class="proj-img">
+      <div class="proj-overlay"><div class="proj-cat">Villa</div><div class="proj-name">Heritage Villa Estate</div><div class="proj-loc">📍 Suburban Heights, Indore</div></div>
+      <div class="proj-arrow">↗</div>
+    </div>
+    <div class="proj-card">
+      <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500&q=85" alt="Apartments" class="proj-img">
+      <div class="proj-overlay"><div class="proj-cat">Apartments</div><div class="proj-name">Skyline Apartments Complex</div><div class="proj-loc">📍 North Extension, Indore</div></div>
+      <div class="proj-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery reveal" id="gallery">
+  <div style="text-align:center;margin-bottom:50px;">
+    <div class="section-tag" style="justify-content:center;"><span>Photo Gallery</span></div>
+    <h2 class="section-title">Our Work in <em>Pictures</em></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gal-item tall"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=700&q=85" alt="Construction"><div class="gal-overlay"><span>Under Construction</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=85" alt="Luxury Home"><div class="gal-overlay"><span>Luxury Residence</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=85" alt="Office Building"><div class="gal-overlay"><span>Commercial Tower</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=85" alt="Villa"><div class="gal-overlay"><span>Premium Villa</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=85" alt="Interior"><div class="gal-overlay"><span>Interior Design</span></div></div>
+    <div class="gal-item tall"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=85" alt="Architecture"><div class="gal-overlay"><span>Modern Architecture</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&q=85" alt="Apartment"><div class="gal-overlay"><span>Apartment Complex</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=85" alt="House"><div class="gal-overlay"><span>Dream Home</span></div></div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="whyus reveal">
+  <div class="whyus-visual">
+    <img src="https://images.unsplash.com/photo-1521790361543-f645cf042ec4?w=700&q=85" alt="Construction team" class="whyus-bg-img">
+    <div class="whyus-accent"></div><div class="whyus-accent2"></div>
+  </div>
+  <div>
+    <div class="section-tag"><span>Why Choose Us</span></div>
+    <h2 class="section-title">Built on <em>Trust</em><br>& Experience</h2>
+    <div class="whyus-list">
+      <div class="why-item"><div class="why-num">01</div><div class="why-text"><strong>Two Decades of Proven Excellence</strong><p>Since 2004, we've successfully completed 350+ projects of varying scales, earning the trust of thousands of clients across Indore and MP.</p></div></div>
+      <div class="why-item"><div class="why-num">02</div><div class="why-text"><strong>Transparent Pricing & No Hidden Costs</strong><p>Detailed estimates upfront with clear breakdowns. What we quote is what you pay — always.</p></div></div>
+      <div class="why-item"><div class="why-num">03</div><div class="why-text"><strong>Expert Team of Engineers & Architects</strong><p>100+ qualified engineers, architects, and skilled workers ensure top-quality work every time.</p></div></div>
+      <div class="why-item"><div class="why-num">04</div><div class="why-text"><strong>On-Time Handover, Every Time</strong><p>Rigorous project timelines and milestone tracking ensure your project is delivered on schedule.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials reveal">
+  <div class="section-tag" style="justify-content:center;"><span>Client Testimonials</span></div>
+  <h2 class="section-title">What Our <em>Clients</em> Say</h2>
+  <div class="testi-grid">
+    <div class="testi-card"><div class="quote-mark">"</div><div class="stars">★★★★★</div><p class="testi-text">C.S. Enterprises built our dream home exactly as envisioned. Quality is exceptional and they delivered on time. Highly recommended!</p><div class="testi-author"><div class="testi-avatar">R</div><div class="testi-name"><strong>Ramesh Sharma</strong><span>Homeowner, Indore</span></div></div></div>
+    <div class="testi-card"><div class="quote-mark">"</div><div class="stars">★★★★★</div><p class="testi-text">We entrusted them with our 5-storey commercial project and they executed flawlessly. Professional team, transparent billing, zero delays!</p><div class="testi-author"><div class="testi-avatar">P</div><div class="testi-name"><strong>Priya Mehta</strong><span>Business Owner, Indore</span></div></div></div>
+    <div class="testi-card"><div class="quote-mark">"</div><div class="stars">★★★★★</div><p class="testi-text">From planning to handover, C.S. Enterprises was with us at every step. Our office renovation exceeded all expectations. True professionals!</p><div class="testi-author"><div class="testi-avatar">A</div><div class="testi-name"><strong>Arjun Kapoor</strong><span>Corporate Client, Indore</span></div></div></div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section reveal">
+  <div class="map-header">
+    <div class="section-tag" style="justify-content:center;"><span>Find Us</span></div>
+    <h2 class="section-title">Our <em>Location</em></h2>
+    <p style="color:var(--text-muted);margin-top:10px;font-size:15px;">Plot No. 324, Omaxe City 2, Indore, Madhya Pradesh</p>
+  </div>
+  <iframe class="map-embed" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58847.07989066846!2d75.8576771!3d22.7195687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fcad1b410ddb%3A0x96ec4da356240f4!2sOmaxe%20City%202%2C%20Indore%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
+</section>
+
+<!-- CONTACT -->
+<section class="contact reveal" id="contact">
+  <div class="contact-info">
+    <div class="section-tag"><span>Get In Touch</span></div>
+    <h2 class="section-title">Let's Build<br><em>Together</em></h2>
+    <p>Have a project in mind? Reach out for a free consultation and detailed cost estimate. Our team is ready to turn your vision into reality.</p>
+    <div class="contact-details">
+      <div class="contact-row"><div class="contact-icon">📞</div><div class="contact-row-text"><strong>Phone</strong><span>+91 7470677883</span></div></div>
+      <div class="contact-row"><div class="contact-icon">✉️</div><div class="contact-row-text"><strong>Email</strong><span>mrchetansinghtanwar@gmail.com</span></div></div>
+      <div class="contact-row"><div class="contact-icon">📍</div><div class="contact-row-text"><strong>Office Address</strong><span>C.S. Enterprises, Plot No. 324,<br>Omaxe City 2, Indore, Madhya Pradesh</span></div></div>
+      <div class="contact-row"><div class="contact-icon">🕐</div><div class="contact-row-text"><strong>Working Hours</strong><span>Mon – Sat: 9:00 AM – 6:00 PM</span></div></div>
+    </div>
+    <div class="social-links">
+      <h4>Follow Us On</h4>
+      <div class="social-icons">
+        <a href="https://facebook.com" target="_blank" class="soc-btn soc-fb">📘 Facebook</a>
+        <a href="https://instagram.com" target="_blank" class="soc-btn soc-ig">📸 Instagram</a>
+        <a href="https://wa.me/917470677883" target="_blank" class="soc-btn soc-wa">💬 WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="contact-form">
+    <div class="form-row">
+      <div class="form-group"><label>Your Name</label><input type="text" placeholder="Full Name"></div>
+      <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
+    </div>
+    <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+    <div class="form-group"><label>Project Type</label>
+      <select>
+        <option value="">Select a Service</option>
+        <option>Residential Construction</option>
+        <option>Commercial Building</option>
+        <option>Renovation & Remodelling</option>
+        <option>Civil Infrastructure</option>
+        <option>Interior Design</option>
+        <option>Turnkey Project</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Your Message</label><textarea placeholder="Tell us about your project — location, size, timeline, and budget..."></textarea></div>
+    <button class="submit-btn" onclick="alert('Thank you! We will contact you shortly on +91 7470677883')">Send Message →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo-main">C.S. ENTERPRISES</div>
+    <div class="footer-logo-sub">Building Excellence Since 2004</div>
+    <p>Delivering landmark construction projects with 20 years of expertise and passion across Indore & Madhya Pradesh.</p>
+    <div class="footer-social">
+      <a href="https://facebook.com" target="_blank" class="fsoc" style="background:#1877f2;" title="Facebook">📘</a>
+      <a href="https://instagram.com" target="_blank" class="fsoc" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);" title="Instagram">📸</a>
+      <a href="https://wa.me/917470677883" target="_blank" class="fsoc" style="background:#25d366;" title="WhatsApp">💬</a>
+    </div>
+  </div>
+  <div class="footer-col">
+    <h4>Services</h4>
+    <ul>
+      <li><a href="#">Residential</a></li>
+      <li><a href="#">Commercial</a></li>
+      <li><a href="#">Renovation</a></li>
+      <li><a href="#">Civil Works</a></li>
+      <li><a href="#">Interior Design</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <ul>
+      <li><a href="tel:+917470677883">📞 +91 7470677883</a></li>
+      <li><a href="mailto:mrchetansinghtanwar@gmail.com">✉️ Gmail</a></li>
+      <li><a href="https://wa.me/917470677883" target="_blank">💬 WhatsApp</a></li>
+      <li><a href="#contact">📍 Omaxe City 2, Indore</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2024 <span>C.S. Enterprises</span>. All Rights Reserved. | Indore, MP</p>
+  <p>Made with ❤️ — <span>20 Years of Excellence</span></p>
+</div>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
